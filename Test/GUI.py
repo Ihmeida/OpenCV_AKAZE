@@ -68,44 +68,35 @@ if __name__ == "__main__":
     main()
 
 #%%
-from tkinter import *
-import numpy as np
-from PIL import ImageTk 
-from PIL import Image  
-
-root = Tk()
-
-
-#imLabel = tk.Label(root,image=img).pack()
-imLabel = tk.Label(root, text="helolo")
-imLabel.pack()
-
-
-#imLabel.config(text="New text")
-# or
-#imLabel["text"] = "New text"
-
-w = Canvas(root, width=400, height=400, background="white")
-w.pack()
+import tkinter as tk
 def _paint(event):
-    global data
-    global img
-
     x1, y1 = (event.x - 1), (event.y - 1)
     x2, y2 = (event.x + 1), (event.y + 1)
     w.create_oval(x1, y1, x2, y2, fill="red")
-    
-    data = data + 1
     img =  ImageTk.PhotoImage(image=Image.fromarray(data), master=root)
     w.create_image(0, 0, anchor="nw", image=img)
-    imLabel["image"] =img
+    #w.create_rectangle(50, 25, 150, 75, fill="blue")
     w.update()
 
-data = np.zeros((100,100))
+def _click(event):
+    
+    lab["text"] = "clecked"
+    x1 =  (event.x - 1)
+    print("clecked")
+    lab.update()
 
-
-img =  ImageTk.PhotoImage(image=Image.fromarray(data), master=root)
-
-
+root = tk.Tk()
+w = tk.Canvas(root, width=400, height=400, background="white")
+w.pack()
 w.bind("<B1-Motion>", _paint)
-mainloop()
+
+lab = tk.Label(root, text="status")
+lab.pack()
+
+btn = tk.Button(root, text="click me")
+btn.pack()
+btn.bind("<B1-Motion>", _click)
+
+
+data = np.zeros((100,100))
+tk.mainloop()

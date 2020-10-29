@@ -51,9 +51,9 @@ def kaze_match(im1_path, im2_path, number:int=20, isShow:bool=False):
 #%%
 def AkazeClick():
     global data
-    global canvas
+    #global canvas
     global labelImg
-
+    print("AkazeClick click")
     if not os.path.isfile(image1):
         info.set("Please read image1")
         return
@@ -68,10 +68,13 @@ def AkazeClick():
     #print(fileName)
     info.set("compare: \n{0} \n{1} \nSave:{2}".format(image1, image2, fileName))
     label.update()
+
     Image.fromarray(data).save(fileName)
     img =  ImageTk.PhotoImage(image=Image.fromarray(data), master=window)
 
-    labelImg["image"] = img
+    #labelImg["image"] = img
+    #labelImg["text"] = "cleck ed"
+    #labelImg.update()
 
     """ TODO
     canvas.create_image(0, 0, anchor="nw", image=img)
@@ -89,6 +92,9 @@ def CallFile2():
     info.set("Read: {}".format(image2))
 
 #%%
+
+def click(event):
+    print("clicked")
 
 image1 = ""
 image2 = ""
@@ -108,18 +114,19 @@ btnCallFile2.pack()
 
 btn = tk.Button(window, text="AKAZE click", command=AkazeClick)
 btn.pack()
+#btn.bind("<B1-Motion>", AkazeClick)
 
 label = tk.Label(window, textvariable=info, bg="light green")
 label.pack()
 
-labelImg = tk.Label(window, text = "test")
-labelImg.pack()
+#labelImg = tk.Label(window, text = "test")
+#labelImg.pack()
 
 # TODO 後續待修改如何由 click 更新至 canvas 上
-global canvas
-canvas = tk.Canvas(window, width=400, height=400)
+#global canvas
+#canvas = tk.Canvas(window, width=400, height=400)
 #canvas.create_image(0, 0, anchor="nw", image=img)
-canvas.pack()
+#canvas.pack()
 window.mainloop()
 
 #%%
