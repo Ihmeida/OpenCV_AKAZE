@@ -1,102 +1,64 @@
 
-
-
-
-#import tkinter as tk
-#window = tk.Tk()
-#window.title("AKAZE")
-#window.geometry("400x400")
-#
-#label = tk.Label(window, text="AKAZE", bg="green")
-#label.pack()
-#
-#btn = tk.Button(window, text="AKAZE click", command=akazeClick)
-#btn.pack()00o
-#
-#window.mainloop()
-x = input()
-print(x*100)
-y= input()
-print(y*100)
-
-import tkinter as tk
-window = tk.Tk()
-window.title("AKAZE")
-window.geometry("400x400")
-
-label = tk.Label(window, text="AKAZE", bg="green")
-label.pack()
-
-btn = tk.Button(window, text="AKAZE click")
-btn.pack()
-
-window.mainloop()
-
-
-
-#%%
-from tkinter import *
-from PIL import Image, ImageTk
-
-
-def main():
-    root = Tk()
-    w = Canvas(root, width=400, height=400, background="white")
-    w.pack()
-
-    def _paint(event):
-        # event.x 鼠標左鍵的橫坐標
-        # event.y 鼠標左鍵的縱坐標
-        #x1, y1 = (event.x - 1), (event.y - 1)
-        #x2, y2 = (event.x + 1), (event.y + 1)
-        #w.create_oval(x1, y1, x2, y2, fill="red")
-        #w.create_oval(x1, y1, x2, y2, fill="red")
-
-        im3 = np.zeros((100,100))
-        img =  ImageTk.PhotoImage(image=Image.fromarray(im3), master=root)
-        w.create_image(0, 0, anchor="nw", image=img)
-        w.update()
-
-    # 鼠標左鍵一點，就畫出了一個小的橢圓
-    # 畫布與鼠標左鍵進行綁定
-    w.bind("<B1-Motion>", _paint)
-
-    mainloop()
-
-
-if __name__ == "__main__":
-    main()
-
 #%%
 import tkinter as tk
+from PIL import ImageTk 
+from PIL import Image  
+import numpy as np
+data = np.zeros((100,100))
+
+# 藉由 event(mouse) 來觸發事件
+
+# 滑鼠拖曳作畫
 def _paint(event):
+    global data
+    global img
+    global w
     x1, y1 = (event.x - 1), (event.y - 1)
     x2, y2 = (event.x + 1), (event.y + 1)
     w.create_oval(x1, y1, x2, y2, fill="red")
-    img =  ImageTk.PhotoImage(image=Image.fromarray(data), master=root)
-    w.create_image(0, 0, anchor="nw", image=img)
-    #w.create_rectangle(50, 25, 150, 75, fill="blue")
-    w.update()
 
-def _click(event):
-    
-    lab["text"] = "clecked"
-    x1 =  (event.x - 1)
-    print("clecked")
-    lab.update()
+# 點擊 Canvas 更換 canvas
+def CanvasClick(event):
+    global data
+    global img
+    global w2
+    data = (data + 10) %255
+    print("CanvasClick" + str(data[0,0]))
+    img =  ImageTk.PhotoImage(image=Image.fromarray(data), master=root)
+    w2.create_image(0, 0, anchor="nw", image=img)
+
+# 點擊 button 更換 label
+def btnClick(event):
+    global data
+    global img
+
+    data = (data + 10) %255
+    img =  ImageTk.PhotoImage(image=Image.fromarray(data), master=root)
+    print("BtnClick" + str(data[0,0]))
+
+    # 用 label 取代 Canvas, 參數可用 dict 代回去
+    lab["image"] = img
 
 root = tk.Tk()
-w = tk.Canvas(root, width=400, height=400, background="white")
+img =  ImageTk.PhotoImage(image=Image.fromarray(data), master=root)
+
+# <Button-1> 1代表左鍵，2代表中鍵，3代表右鍵
+# <B1-Motion> 1代表按下左鍵拖動，2代表中鍵，3代表右鍵
+w = tk.Canvas(root, width = 100, height=100, background="white")
 w.pack()
 w.bind("<B1-Motion>", _paint)
 
+w2 = tk.Canvas(root, width=100, height=100)
+w2.create_image(0, 0, anchor="nw", image=img)
+w2.pack()
+w2.bind("<Button-1>", CanvasClick)
+
+# label 文字跟 image 2選1
 lab = tk.Label(root, text="status")
 lab.pack()
 
 btn = tk.Button(root, text="click me")
 btn.pack()
-btn.bind("<B1-Motion>", _click)
+btn.bind("<Button-1>", btnClick)
 
-
-data = np.zeros((100,100))
 tk.mainloop()

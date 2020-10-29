@@ -93,9 +93,6 @@ def CallFile2():
 
 #%%
 
-def click(event):
-    print("clicked")
-
 image1 = ""
 image2 = ""
 im3 = ""
